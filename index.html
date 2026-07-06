@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub - Your Complete Learning Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">📚 StudyHub</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="switchTab('home')">Home</a></li>
+                <li><a href="#" onclick="switchTab('quiz')">Quiz</a></li>
+                <li><a href="#" onclick="switchTab('flashcards')">Flashcards</a></li>
+                <li><a href="#" onclick="switchTab('assistant')">AI Assistant</a></li>
+                <li><a href="#" onclick="switchTab('materials')">Study Materials</a></li>
+                <li><a href="#" onclick="switchTab('tasks')">Tasks & Todo</a></li>
+                <li><a href="#" onclick="switchTab('scheduler')">Scheduler</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- HOME TAB -->
+        <section id="home" class="tab-content active">
+            <div class="hero">
+                <h1>Welcome to StudyHub</h1>
+                <p>Your all-in-one platform for learning, studying, and acing your exams!</p>
+                <div class="feature-grid">
+                    <div class="feature-card" onclick="switchTab('quiz')">
+                        <div class="icon">🎯</div>
+                        <h3>Quiz</h3>
+                        <p>Test your knowledge on various topics</p>
+                    </div>
+                    <div class="feature-card" onclick="switchTab('flashcards')">
+                        <div class="icon">📇</div>
+                        <h3>Flashcards</h3>
+                        <p>Study with interactive flashcards</p>
+                    </div>
+                    <div class="feature-card" onclick="switchTab('assistant')">
+                        <div class="icon">🤖</div>
+                        <h3>AI Assistant</h3>
+                        <p>Get answers to your questions</p>
+                    </div>
+                    <div class="feature-card" onclick="switchTab('materials')">
+                        <div class="icon">📄</div>
+                        <h3>Study Materials</h3>
+                        <p>Upload and convert materials to flashcards</p>
+                    </div>
+                    <div class="feature-card" onclick="switchTab('tasks')">
+                        <div class="icon">✓</div>
+                        <h3>Task Tracker</h3>
+                        <p>Manage your tasks and to-do list</p>
+                    </div>
+                    <div class="feature-card" onclick="switchTab('scheduler')">
+                        <div class="icon">📅</div>
+                        <h3>Scheduler</h3>
+                        <p>Schedule tests and study sessions</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUIZ TAB -->
+        <section id="quiz" class="tab-content">
+            <h2>Quiz Mode</h2>
+            <div class="quiz-setup">
+                <div class="form-group">
+                    <label>Select Topic:</label>
+                    <select id="quizTopic">
+                        <option value="">-- Choose a Topic --</option>
+                        <option value="geography">Geography</option>
+                        <option value="math">Math</option>
+                        <option value="general">General Knowledge</option>
+                        <option value="science">Science</option>
+                        <option value="history">History</option>
+                        <option value="literature">Literature</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Number of Questions:</label>
+                    <input type="number" id="quizCount" value="10" min="1" max="50">
+                </div>
+
+                <div class="form-group">
+                    <label>Difficulty Level:</label>
+                    <select id="quizDifficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+
+                <button class="btn-primary" onclick="startQuiz()">Start Quiz</button>
+            </div>
+
+            <div id="quizContainer" class="quiz-container" style="display: none;">
+                <div class="quiz-header">
+                    <span id="questionNumber">Question 1/10</span>
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="question-box">
+                    <h3 id="questionText"></h3>
+                    <div id="optionsContainer" class="options-container"></div>
+                </div>
+
+                <div class="quiz-buttons">
+                    <button class="btn-secondary" onclick="previousQuestion()">Previous</button>
+                    <button id="nextBtn" class="btn-primary" onclick="nextQuestion()">Next</button>
+                </div>
+            </div>
+
+            <div id="quizResults" class="results-container" style="display: none;">
+                <h3>Quiz Complete!</h3>
+                <div class="score-display">
+                    <div class="score-circle">
+                        <span id="scorePercentage">0%</span>
+                    </div>
+                    <p id="scoreText">You got 0 out of 10 correct</p>
+                </div>
+                <div id="resultDetails"></div>
+                <button class="btn-primary" onclick="resetQuiz()">Take Another Quiz</button>
+            </div>
+        </section>
+
+        <!-- FLASHCARDS TAB -->
+        <section id="flashcards" class="tab-content">
+            <h2>Flashcard Study</h2>
+            
+            <div class="flashcard-mode-selector">
+                <button class="mode-btn active" onclick="showFlashcardMode('browse')">Browse Sets</button>
+                <button class="mode-btn" onclick="showFlashcardMode('create')">Create New Set</button>
+                <button class="mode-btn" onclick="showFlashcardMode('study')">Study Mode</button>
+            </div>
+
+            <!-- Browse Flashcard Sets -->
+            <div id="browseMode" class="flashcard-section">
+                <div class="flashcard-list" id="flashcardSetsList"></div>
+                <button class="btn-primary" onclick="loadSampleFlashcards()">Load Sample Sets</button>
+            </div>
+
+            <!-- Create New Set -->
+            <div id="createMode" class="flashcard-section" style="display: none;">
+                <div class="create-set-form">
+                    <div class="form-group">
+                        <label>Set Name:</label>
+                        <input type="text" id="setName" placeholder="Enter set name">
+                    </div>
+                    <div class="form-group">
+                        <label>Set Description:</label>
+                        <textarea id="setDescription" placeholder="Enter description"></textarea>
+                    </div>
+
+                    <div id="cardsContainer" class="cards-container"></div>
+
+                    <button class="btn-secondary" onclick="addNewCard()">Add Card</button>
+                    <button class="btn-primary" onclick="saveFlashcardSet()">Save Set</button>
+                </div>
+            </div>
+
+            <!-- Study Mode -->
+            <div id="studyMode" class="flashcard-section" style="display: none;">
+                <div class="study-setup">
+                    <div class="form-group">
+                        <label>Select a Set to Study:</label>
+                        <select id="studySetSelect" onchange="loadStudySet()"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Study Mode:</label>
+                        <select id="studyModeSelect">
+                            <option value="flip">Flip Mode</option>
+                            <option value="multiple">Multiple Choice</option>
+                            <option value="typing">Typing Practice</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" onclick="startStudyMode()">Start Studying</button>
+                </div>
+
+                <div id="studyContainer" class="study-container" style="display: none;">
+                    <div class="study-header">
+                        <span id="cardProgress">1/10</span>
+                        <button class="btn-secondary" onclick="exitStudyMode()">Exit</button>
+                    </div>
+
+                    <div class="card-viewer">
+                        <div id="cardFlip" class="flip-card" onclick="flipCard()">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front">
+                                    <p id="cardFront">Front</p>
+                                </div>
+                                <div class="flip-card-back">
+                                    <p id="cardBack">Back</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="studyActions" class="study-actions">
+                        <button class="btn-secondary" onclick="markKnown()">Know It ✓</button>
+                        <button class="btn-secondary" onclick="markUnsure()">Not Sure ?</button>
+                        <button class="btn-secondary" onclick="markUnknown()">Don't Know ✗</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI ASSISTANT TAB -->
+        <section id="assistant" class="tab-content">
+            <h2>AI Study Assistant</h2>
+            <div class="assistant-container">
+                <div id="chatHistory" class="chat-history"></div>
+                <div class="chat-input-area">
+                    <textarea id="assistantInput" placeholder="Ask me anything about your studies..." rows="3"></textarea>
+                    <button class="btn-primary" onclick="sendAssistantMessage()">Send</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- STUDY MATERIALS TAB -->
+        <section id="materials" class="tab-content">
+            <h2>Study Materials</h2>
+            <div class="materials-section">
+                <div class="upload-area">
+                    <div class="drop-zone" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+                        <p>📤 Drag and drop your files here</p>
+                        <p>or</p>
+                        <input type="file" id="fileInput" onchange="handleFileUpload(event)" accept=".pdf,.txt,.docx">
+                        <label for="fileInput" class="btn-secondary">Choose File</label>
+                    </div>
+                </div>
+
+                <div class="conversion-options">
+                    <h3>Convert To:</h3>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" id="convertFlashcards" checked> Flashcards
+                        </label>
+                        <label>
+                            <input type="checkbox" id="convertQuestions"> Quiz Questions
+                        </label>
+                    </div>
+                    <button class="btn-primary" onclick="convertMaterial()">Generate</button>
+                </div>
+
+                <div id="materialsResult" class="materials-result" style="display: none;">
+                    <h3>Generated Content</h3>
+                    <div id="resultContent"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TASKS & TODO TAB -->
+        <section id="tasks" class="tab-content">
+            <h2>Task & Todo Tracker</h2>
+            
+            <div class="task-input-area">
+                <div class="form-group">
+                    <input type="text" id="taskInput" placeholder="Add a new task...">
+                </div>
+                <div class="form-group">
+                    <select id="taskCategory">
+                        <option value="study">Study</option>
+                        <option value="assignment">Assignment</option>
+                        <option value="project">Project</option>
+                        <option value="exam">Exam Prep</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="date" id="taskDueDate">
+                </div>
+                <button class="btn-primary" onclick="addTask()">Add Task</button>
+            </div>
+
+            <div class="task-filters">
+                <button class="filter-btn active" onclick="filterTasks('all')">All</button>
+                <button class="filter-btn" onclick="filterTasks('pending')">Pending</button>
+                <button class="filter-btn" onclick="filterTasks('completed')">Completed</button>
+                <button class="filter-btn" onclick="filterTasks('overdue')">Overdue</button>
+            </div>
+
+            <div id="tasksList" class="tasks-list"></div>
+        </section>
+
+        <!-- SCHEDULER TAB -->
+        <section id="scheduler" class="tab-content">
+            <h2>Study Scheduler</h2>
+            
+            <div class="scheduler-setup">
+                <h3>Schedule a Test or Study Session</h3>
+                <div class="form-group">
+                    <label>Event Name:</label>
+                    <input type="text" id="eventName" placeholder="e.g., Biology Midterm">
+                </div>
+
+                <div class="form-group">
+                    <label>Event Type:</label>
+                    <select id="eventType">
+                        <option value="test">Test</option>
+                        <option value="study">Study Session</option>
+                        <option value="project">Project Deadline</option>
+                        <option value="review">Review Session</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Date & Time:</label>
+                    <input type="datetime-local" id="eventDateTime">
+                </div>
+
+                <div class="form-group">
+                    <label>Time Available (hours):</label>
+                    <input type="number" id="timeAvailable" min="0.5" step="0.5" value="2">
+                </div>
+
+                <div class="form-group">
+                    <label>Topics to Study:</label>
+                    <textarea id="eventTopics" placeholder="Enter topics separated by commas"></textarea>
+                </div>
+
+                <button class="btn-primary" onclick="addEvent()">Schedule Event</button>
+            </div>
+
+            <div id="scheduleCalendar" class="calendar">
+                <div class="calendar-header">
+                    <button onclick="previousMonth()">← Prev</button>
+                    <h3 id="currentMonth"></h3>
+                    <button onclick="nextMonth()">Next →</button>
+                </div>
+                <div id="calendarDays" class="calendar-days"></div>
+            </div>
+
+            <div id="eventsList" class="events-list"></div>
+
+            <div id="studyPlan" class="study-plan" style="display: none;">
+                <h3>Recommended Study Plan</h3>
+                <p id="planDetails"></p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
